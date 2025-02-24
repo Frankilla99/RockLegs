@@ -9,22 +9,13 @@ pipeline {
         )
         disableConcurrentBuilds()
     }
-    stages {
-        stage('Hello') {
-            steps {
-                echo "hello"
-            }
+	stage('Update Jira') {
+    steps {
+        script {
+            def issueKey = "Testing"
+            jiraAddComment idOrKey: issueKey, comment: "Build started: ${env.BUILD_URL}"
+            jiraTransitionIssue idOrKey: issueKey, transition: "In Progress"
         }
-	stage('cat README'){
-	when
-	{
-		branch "fix-*" 
-	}
-	steps{
-		sh '''
-			cat README.md
-		'''
-	}	
-	}
     }
+}
 }
